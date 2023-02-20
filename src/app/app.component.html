@@ -1,0 +1,241 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive border">
+        <table class="table table-sm table-hover" style="font-size:14px; margin: 0;">
+          <thead class="thead-dark">
+            <tr>
+              <th>Num of jobs</th>
+              <th>Algorithm</th>
+              <th>Quantum</th>
+              <th>Sim Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <select class="form-control" [(ngModel)]="jobCount" [disabled]="running" (ngModelChange)="handleChanged()">
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control" [(ngModel)]="algo" [disabled]="running" (ngModelChange)="handleChanged()">
+                  <option value="fcfs">First Come First Serve</option>
+                  <option value="sjf">Shortest Job First</option>
+                  <option value="rr">RoundRobin</option>
+                  <option value="p">Priority</option>
+                  <option value="pp">Preemptive Priority</option>
+                  <option value="strf">Shortest Time remaining</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control" [(ngModel)]="quantum" [disabled]="running" (ngModelChange)="handleChanged()">
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control" [(ngModel)]="simSpeed" (ngModelChange)="speedChanged()">
+                  <option value="200">Very fast</option>
+                  <option value="500">fast</option>
+                  <option value="1000">normal</option>
+                  <option value="5000">slow</option>
+                  <option value="10000">very slow</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin: 5px; text-align: center;">
+          <button class="btn btn-primary" (click)="newSim()">
+            <span class="fas fa-redo"></span> New Data
+          </button> &nbsp;
+          <button class="btn btn-primary" (click)="reset()">
+            <span class="fas fa-fast-backward"></span> Reset
+          </button> &nbsp;
+          <button class="btn btn-primary" (click)="play()">
+            <span class="fas fa-play"></span> Play
+          </button> &nbsp;
+          <button class="btn btn-primary" (click)="stop()">
+            <span class="fas fa-pause"></span> Pause
+          </button> &nbsp;
+          <button class="btn btn-primary" (click)="next()">
+            <span class="fas fa-step-forward"></span> Step
+          </button> &nbsp;
+          <button class="btn btn-primary"  (click)="finish()">
+            <span class="fas fa-fast-forward"></span> Finish
+          </button>&nbsp;
+          <button class="btn btn-primary"  (click)="openModal()" [disabled]="running">
+            <span class="fas fa-fast-forward"></span> Import Data
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="table-responsive border">
+        <table class="table table-sm table-hover" style="font-size:14px; margin: 0;">
+          <thead class="thead-dark">
+            <tr>
+              <th colspan="6" style="text-align: center; font-size: 15px;">CPU</th>
+            </tr>
+            <tr>
+              <th>Job</th>
+              <th>Time</th>
+              <th>Idle time</th>
+              <th>Utilization</th>
+              <th>Average Waiting</th>
+              <th>Average Turnaround</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ simulation.jobText }}</td>
+              <td>{{ simulation.time }}</td>
+              <td>{{ simulation.idleTime }}</td>
+              <td>{{ simulation.utilization }} % </td>
+              <td>{{ simulation.averageWait }}</td>
+              <td>{{ simulation.averageTurnaround }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="table-responsive border">
+        <table class="table table-sm table-hover" style="font-size:14px; margin: 0;">
+          <thead class="thead-dark">
+            <tr>
+              <th style="text-align: center; font-size: 15px;">Ready Queue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div>
+                  <span class="fas fa-chevron-right" style="font-size: 20px; margin-right:10px;"></span>
+                  <div *ngFor="let item of simulation.readyQueue" [ngClass]='"gantt-lg-" + item.id'>{{ item.id }}</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive border">
+    <table class="table table-sm table-hover" style="font-size:14px; margin: 0;">
+      <thead class="thead-dark">
+        <tr>
+          <th style="text-align: center; font-size: 15px;">Gantt Chart</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div>
+              <span class="fas fa-chevron-right" style="font-size: 20px; margin-right:10px;"></span>
+              <div *ngFor="let item of simulation.ganttChart" [ngClass]='"gantt-sm-" + item'>{{ item }}</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-responsive border">
+    <table class="table table-sm table-hover ttable">
+      <thead class="thead-dark">
+        <tr>
+          <th colspan="10" style="text-align: center; font-size: 15px;">Job Pool</th>
+        </tr>
+        <tr>
+          <th>#</th>
+          <th>Arrive</th>
+          <th>Burst</th>
+          <th>Priority</th>
+          <th>Start</th>
+          <th>Finish</th>
+          <th>Remain</th>
+          <th>Turnaround</th>
+          <th>Wait</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of simulation.jobs; let idx = index">
+          <td>{{ item.id }}</td>
+          <td>{{ item.arrivalTime }}</td>
+          <td>{{ item.burst }}</td>
+          <td>{{ item.priority }}</td>
+          <td>{{ item.startTime }}</td>
+          <td>{{ item.finishTime }}</td>
+          <td>{{ item.remaining }}</td>
+          <td>{{ item.getTurnaroundTime(simulation.time) }}</td>
+          <td>{{ item.getWaitingTime(simulation.time) }}</td>
+          <td>{{ item.percent }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Import Job Data</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+           <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Arrival Time</th>
+                <th scope="col">Burst</th>
+                <th scope="col">Priority</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of generateNumbers(jobCount)">
+                <th scope="row">{{item}}</th>
+                <td><input #arrivalTime  type="number" placeholder="Arrival Time" min="0" max="30"></td>
+                <td><input #burst type="number" placeholder="Burst" min="0" max="12"></td>
+                <td><input #priority type="number" placeholder="Priority" min="1" max="125"></td>
+                <td><button class="btn btn-primary" (click)="saveJobData(item,arrivalTime.value,burst.value,priority.value)">Save</button></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="saveJob()">Save all data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
