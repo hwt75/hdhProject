@@ -27,14 +27,19 @@ export class AppComponent implements OnInit{
   ngOnInit(){
   }
 
-  generateNumbers(count: number): number[] {
-    return Array.from({ length: count }, (_, i) => i + 1);
+  generateNumbers(){
+    for (var i = 1; i<= this.jobCount;i++){
+      const jobs: Job = Job.createJob(0,0,0,0);
+      this.jobsDemo.push(jobs)
+    }
   }
 
   speedChanged(){
     this.setTimer(Number(this.simSpeed));
   }
   handleChanged(){
+    this.resetJobDemo();
+    this.generateNumbers();
     this.newSim(this.jobs.length === this.jobCount);
   }
 
@@ -81,8 +86,10 @@ export class AppComponent implements OnInit{
     this.jobsDemo.push(jobs);
   }
   saveJob(){
-
-     this.jobs = this.jobsDemo;
+      this.jobsDemo.forEach((item,index)=>{
+        item.id = index+1
+      })
+      this.jobs=this.jobsDemo
      let tmp:any = this.getAlgorithm();
     tmp["quantumTime"] = Number(this.quantum);
     this.simulation = new Simulation(tmp, this.jobs);
@@ -123,4 +130,5 @@ export class AppComponent implements OnInit{
   closeModal() {
     $('#exampleModal').modal('hide')
   }
+
 }

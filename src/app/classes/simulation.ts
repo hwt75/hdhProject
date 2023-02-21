@@ -20,7 +20,7 @@ export class Simulation {
         if(this.isFinished()){ return; }
         this.time++;
         if (this.currentJob && this.currentJob.finished) { this.currentJob = undefined; }
-        
+
         let newJobs = this.jobs.filter(job => job.arrivalTime === this.time);
         this.readyQueue.push(...newJobs);
         this.algorithm.processQueue(this.readyQueue, this.currentJob);
@@ -31,7 +31,7 @@ export class Simulation {
             this.ganttChart.push(this.currentJob ? this.currentJob.id: 0);
             this.idleTime += this.currentJob? 0 : 1;
         }
-        
+
     }
 
     reset() {
@@ -59,12 +59,12 @@ export class Simulation {
     get averageWait(){
         let total = 0;
         this.jobs.forEach(job => { total += job.getWaitingTime(this.time); });
-        return Math.floor(total / this.jobs.length);
+        return (total / this.jobs.length).toFixed(2);
     }
 
     get averageTurnaround(){
         let total = 0;
         this.jobs.forEach(job => { total += job.getTurnaroundTime(this.time); });
-        return Math.floor(total / this.jobs.length);
+        return (total / this.jobs.length).toFixed(2);
     }
 }

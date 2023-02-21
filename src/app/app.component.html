@@ -29,10 +29,10 @@
                 <select class="form-control" [(ngModel)]="algo" [disabled]="running" (ngModelChange)="handleChanged()">
                   <option value="fcfs">First Come First Serve</option>
                   <option value="sjf">Shortest Job First</option>
+                  <option value="strf">Shortest Remaining Time First</option>
                   <option value="rr">RoundRobin</option>
-                  <option value="p">Priority</option>
-                  <option value="pp">Preemptive Priority</option>
-                  <option value="strf">Shortest Time remaining</option>
+                  <!-- <option value="p">Priority</option> -->
+                  <!-- <option value="pp">Preemptive Priority</option> -->
                 </select>
               </td>
               <td>
@@ -218,14 +218,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of generateNumbers(jobCount)">
-                <th scope="row">{{item}}</th>
-                <td><input #arrivalTime  type="number" placeholder="Arrival Time" min="0" max="30"></td>
-                <td><input #burst type="number" placeholder="Burst" min="0" max="12"></td>
-                <td><input #priority type="number" placeholder="Priority" min="1" max="125"></td>
-                <td><button class="btn btn-primary" (click)="saveJobData(item,arrivalTime.value,burst.value,priority.value)">Save</button></td>
+              <tr *ngFor="let item of jobsDemo; let i=index" >
+                <th scope="row" itemid="item.jobId">{{i+1}}</th>
+                <td><input [(ngModel)] = "item.arrivalTime" type="number" placeholder="Arrival Time" min="0" max="30"></td>
+                <td><input [(ngModel)] = "item.burst" type="number" placeholder="Burst" min="0" max="12"></td>
+                <td><input [(ngModel)] = "item.priority" type="number" placeholder="Priority" min="0" max="125"></td>
               </tr>
-
             </tbody>
           </table>
         </div>
@@ -236,6 +234,4 @@
       </div>
     </div>
   </div>
-
-
 </div>
