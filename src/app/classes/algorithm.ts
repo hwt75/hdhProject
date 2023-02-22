@@ -1,7 +1,9 @@
 import { Job } from './job';
 
+
+// Class Algorithm dùng để lập trình và quản lý các thuật toán
 export abstract class Algorithm {
-    protected isPreemptive: boolean = false;
+    protected isPreemptive: boolean = false; // độ ưu tiên
 
     processQueue(readyQueue: Job[], currentJob: Job | undefined) {
         if (currentJob && this.isPreemptive) { readyQueue.push(currentJob); }
@@ -15,13 +17,13 @@ export abstract class Algorithm {
 }
 
 /**
- * "First Come First Serve" is a non-preemptive algorithm.
+ * Thuật toán "First Come First Serve"
  */
 export class FirstComeFirstServe extends Algorithm { }
 
 /**
- * "Shortest job first" is a non-preemptive algorithm.
- * Ready queue is reordered by shortest burst time job every time a new job arrives.
+ * Thuật toán "Shortest job first"
+
  */
 export class ShortestJobFirst extends Algorithm {
     protected override orderQueue(readyQueue: Job[]) {
@@ -30,26 +32,7 @@ export class ShortestJobFirst extends Algorithm {
 }
 
 /**
- * "Non-preemptive priority" is a non-preemptive algorithm.
- * Ready queue is reordered by priority job every time a new job arrives.
- */
-export class Priority extends Algorithm {
-    protected override orderQueue(readyQueue: Job[]) {
-        return readyQueue.sort((a, b) => { return a.compareByPriority(b); })
-    }
-}
-
-/**
- * "Preemptive priority" is a preemptive algorithm.
- * Ready queue is reordered by priority job every time a new job arrives including the current job.
- */
-export class PreemptivePriority extends Priority {
-    protected override isPreemptive: boolean = true;
-}
-
-/**
- * "Shortest time remaining first" is a preemptive algorithm.
- * Ready queue is reordered by shortest remaining time every time a new job arrives including the current job.
+ * Thuật toán "Shortest time remaining first" hiệu quả hơn so với 3 thuật toán trên
  */
 export class STRF extends Algorithm {
     protected override isPreemptive = true;
@@ -59,14 +42,11 @@ export class STRF extends Algorithm {
 }
 
 /**
- * "Round Robin" is a non-preemptive algorithm.
- * It lets every job to be processed by the CPU for a certain time "quantum time"
- *  then replace it by the next job in the ready queue.
- * when a job finishes its quantum time it returns to the end of the ready queue.
+ * Thuật toán "Round Robin"
  */
 export class RoundRobin extends Algorithm {
     quantumTime: number = 2;
-    private processTime: number = 0; // how much time a current job has been running
+    private processTime: number = 0; // thời gian công việc chạy
 
     override processQueue(readyQueue: Job[], currentJob: Job) {
         if (!currentJob) { this.processTime = 0; return; }

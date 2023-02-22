@@ -14,6 +14,7 @@
           <tbody>
             <tr>
               <td>
+                <!--Chọn số lượng công việc-->
                 <select class="form-control" [(ngModel)]="jobCount" [disabled]="running" (ngModelChange)="handleChanged()">
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -26,16 +27,16 @@
                 </select>
               </td>
               <td>
+                <!--Chọn thuật toán-->
                 <select class="form-control" [(ngModel)]="algo" [disabled]="running" (ngModelChange)="handleChanged()">
                   <option value="fcfs">First Come First Serve</option>
                   <option value="sjf">Shortest Job First</option>
                   <option value="strf">Shortest Remaining Time First</option>
                   <option value="rr">RoundRobin</option>
-                  <!-- <option value="p">Priority</option> -->
-                  <!-- <option value="pp">Preemptive Priority</option> -->
                 </select>
               </td>
               <td>
+                <!--Chọn quantum chỉ áp dụng với thuật toán RoundRobin-->
                 <select class="form-control" [(ngModel)]="quantum" [disabled]="running" (ngModelChange)="handleChanged()">
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -48,6 +49,7 @@
                 </select>
               </td>
               <td>
+                <!--Điều chỉnh tốc độ của chương trình -->
                 <select class="form-control" [(ngModel)]="simSpeed" (ngModelChange)="speedChanged()">
                   <option value="200">Very fast</option>
                   <option value="500">fast</option>
@@ -59,6 +61,7 @@
             </tr>
           </tbody>
         </table>
+        <!--Nút điều hướng-->
         <div style="margin: 5px; text-align: center;">
           <button class="btn btn-primary" (click)="newSim()">
             <span class="fas fa-redo"></span> New Data
@@ -151,6 +154,7 @@
         <tr>
           <td>
             <div>
+              <!--Mô tả chỉ số các công việc đang chạy-->
               <span class="fas fa-chevron-right" style="font-size: 20px; margin-right:10px;"></span>
               <div *ngFor="let item of simulation.ganttChart" [ngClass]='"gantt-sm-" + item'>{{ item }}</div>
             </div>
@@ -197,7 +201,7 @@
   </div>
 
 
-
+<!--Bảng nhập dữ liệu từ bàn phím-->
   <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -219,7 +223,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of jobsDemo; let i=index" >
-                <th scope="row" itemid="item.jobId">{{i+1}}</th>
+                <th scope="row">{{i+1}}</th>
                 <td><input [(ngModel)] = "item.arrivalTime" type="number" placeholder="Arrival Time" min="0" max="30"></td>
                 <td><input [(ngModel)] = "item.burst" type="number" placeholder="Burst" min="0" max="12"></td>
                 <td><input [(ngModel)] = "item.priority" type="number" placeholder="Priority" min="0" max="125"></td>

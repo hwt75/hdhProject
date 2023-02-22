@@ -1,15 +1,17 @@
 import { Algorithm } from './algorithm';
 import { Job } from './job';
 
+
+// class Simulation dùng để điều khiển việc chạy mô phỏng
 export class Simulation {
 
-    time: number = 0;
-    algorithm: Algorithm;
-    jobs: Job[];
-    readyQueue: Job[] = [];
-    currentJob: Job | undefined = undefined;
-    ganttChart:any = [];
-    idleTime: number = 0;
+    time: number = 0; // thời gian chạy
+    algorithm: Algorithm; // thuật toán đang xử lý
+    jobs: Job[]; // mảng các công việc đang chạy
+    readyQueue: Job[] = []; // hang đợi
+    currentJob: Job | undefined = undefined; // công việc hiện tại
+    ganttChart:any = []; // mảng mô phỏng
+    idleTime: number = 0; // thời gian chạy cảu từng công việc
 
     constructor(algorithm: Algorithm, jobs: Job[]) {
         this.jobs = jobs;
@@ -47,6 +49,7 @@ export class Simulation {
         return this.jobs.every(job => job.finished);
     }
 
+    // Lấy chỉ số các công việc đang chạy
     get jobText(){
         return this.currentJob? this.currentJob.id : "Idle";
     }

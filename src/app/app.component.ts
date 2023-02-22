@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FirstComeFirstServe, PreemptivePriority, Priority, RoundRobin, ShortestJobFirst, STRF } from './classes/algorithm';
+import { FirstComeFirstServe, RoundRobin, ShortestJobFirst, STRF } from './classes/algorithm';
 import { Job } from './classes/job';
 import { Simulation } from './classes/simulation';
 declare var $: any;
@@ -9,12 +9,14 @@ declare var $: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
+// class appComponent dùng để điều khiển giao diện thông qua thư viện Angular
 export class AppComponent implements OnInit{
+  // tạo giá trị ban đầu cho chương trình
   title = 'CPU-Scheduling';
   simulation: any = null;
   jobs: Job [] = [];
   jobsDemo: Job [] = [];
-
 
   simSpeed = 1000;
   quantum = 2;
@@ -33,10 +35,11 @@ export class AppComponent implements OnInit{
       this.jobsDemo.push(jobs)
     }
   }
-
+// điều chỉnh tốc độ
   speedChanged(){
     this.setTimer(Number(this.simSpeed));
   }
+  // xử lý hành động
   handleChanged(){
     this.resetJobDemo();
     this.generateNumbers();
@@ -52,20 +55,19 @@ export class AppComponent implements OnInit{
       this.simulation.nextStep();
     }, time);
   }
-
+// xử lý thuật toán
   getAlgorithm(){
     switch(this.algo){
       case "fcfs": { return new FirstComeFirstServe(); }
       case "sjf": { return new ShortestJobFirst(); }
       case "rr": { return new RoundRobin(); }
-      case "p": { return new Priority(); }
-      case "pp": { return new PreemptivePriority(); }
       case "strf": { return new STRF(); }
     }
     return new FirstComeFirstServe();
   }
 
   running = false;
+  // Tạo ngẫu nhiên data mới
   newSim(sameJobs: boolean = false){
     this.stop();
     if(!sameJobs){
@@ -80,7 +82,7 @@ export class AppComponent implements OnInit{
     this.simulation = new Simulation(tmp, this.jobs);
     this.simulation.reset();
   }
-
+// Lưu công việc nhập từ form
   saveJobData(jobId:number, arrivalTime:string, burst: string, priority:string){
     const jobs: Job = Job.createJob(jobId,parseFloat(arrivalTime), parseFloat(burst), parseFloat(priority));
     this.jobsDemo.push(jobs);
@@ -96,9 +98,11 @@ export class AppComponent implements OnInit{
     this.simulation.reset();
     this.closeModal();
   }
+  // reset
   clearData(){
     this.jobsDemo = []
   }
+  // chạy chương trình
   play(){
     if(this.simulation.isFinished()){
       this.simulation.reset();
@@ -106,14 +110,17 @@ export class AppComponent implements OnInit{
     this.running = true;
     this.setTimer(this.simSpeed);
   }
+  // tạm dùng chương trình
   stop(){
     this.running = false;
     this.setTimer(0);
   }
+  // chuyển sang công việc tiếp theo
   next(){
     this.stop();
     this.simulation.nextStep();
   }
+  // Tua nhanh thời gian mô phỏng
   finish(){
     this.setTimer(1);
   }
@@ -124,9 +131,11 @@ export class AppComponent implements OnInit{
   resetJobDemo(){
     this.jobsDemo = [];
   }
+  // bật form nhập dữ liệu
   openModal() {
     $('#exampleModal').modal('show');
   }
+  // đóng form nhập dữ liệu
   closeModal() {
     $('#exampleModal').modal('hide')
   }

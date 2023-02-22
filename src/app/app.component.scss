@@ -6,6 +6,8 @@
     color: white;
     padding: 15px 0;
 }
+
+// Bảng màu các công việc từ 0 đến 9 
 $colors: transparent #9C0000 darkgreen #505050 #171515 #0000E6 #40A800 #720E9E #c45608 #634d40;
 @for $i from 0 through 9 {
     .gantt-sm-#{$i} {
